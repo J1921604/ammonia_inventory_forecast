@@ -396,7 +396,8 @@ export default function Dashboard() {
     }
   }
 
-  const chartOptions: any = {
+  // チャートオプション（baseDateに反応するようにuseMemoでメモ化）
+  const chartOptions: any = React.useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode: 'index', intersect: false },
@@ -430,6 +431,13 @@ export default function Dashboard() {
               return ['基準日', label]
             }
             return label
+          },
+          font: (context: any) => {
+            if (!baseDate) return { weight: 'normal' }
+            const bd = parseJstDate(baseDate)
+            const baseDateLabel = `${bd.getMonth() + 1}/${bd.getDate()}`
+            const currentLabel = context.chart.data.labels[context.index]
+            return currentLabel === baseDateLabel ? { weight: 'bold' } : { weight: 'normal' }
           }
         },
       },
@@ -450,47 +458,76 @@ export default function Dashboard() {
         ticks: { color: '#e0e0e0' },
       },
     },
-  }
+  }), [baseDate]) // baseDateが変更されたらオプションを再生成
 
-  // 基準日の赤い縦線を描画するプラグイン
-  const baseDateLinePlugin = {
-    id: 'baseDateLine',
-    afterDraw: (chart: any) => {
-      if (!baseDate) return
-      
-      const xScale = chart.scales.x
-      const yScale = chart.scales.y
-      
-      // チャートのラベルを取得
-      const labels = chart.data.labels
-      let baseDateIndex = -1
-      
-      // 基準日のインデックスを探す
-      for (let i = 0; i < labels.length; i++) {
-        // baseDateは "YYYY-MM-DD" 形式、labelsは "M/D" 形式
+  // 基準日の赤い縦線を描画するプラグイン（baseDate をクロージャで参照）
+  const baseDateLinePlugin = React.useMemo(() => {
+    return {
+      id: 'baseDateLine',
+      afterDraw: (chart: any) => {
+        // baseDateをクロージャで参照
+        if (!baseDate) {
+          console.log('baseDateLinePlugin: baseDate is not set')
+          return
+        }
+        
+        const xScale = chart.scales.x
+        const yScale = chart.scales.y
+        
+        // チャートのラベルを取得
+        const labels = chart.data.labels
+        let baseDateIndex = -1
+        
+        // 基準日のインデックスを探す
         const bd = parseJstDate(baseDate)
         const expectedLabel = `${bd.getMonth() + 1}/${bd.getDate()}`
-        if (labels[i] === expectedLabel) {
-          baseDateIndex = i
-          break
+        
+        console.log(`baseDateLinePlugin: baseDate=${baseDate}, expectedLabel=${expectedLabel}`)
+        console.log(`baseDateLinePlugin: labels=`, labels)
+        
+        for (let i = 0; i < labels.length; i++) {
+          // baseDateは "YYYY-MM-DD" 形式、labelsは "M/D" 形式
+          if (labels[i] === expectedLabel) {
+            baseDateIndex = i
+            console.log(`baseDateLinePlugin: Found baseDate at index ${i}`)
+            break
+          }
         }
+        
+        if (baseDateIndex === -1) {
+          console.log(`baseDateLinePlugin: baseDate not found in labels. Expected: ${expectedLabel}`)
+          return
+        }
+        
+        const x = xScale.getPixelForValue(baseDateIndex)
+        console.log(`baseDateLinePlugin: Drawing line at index ${baseDateIndex}, x=${x}`)
+        
+        const ctx = chart.ctx
+        ctx.save()
+        
+  // より目立つ赤い縦線
+  ctx.strokeStyle = 'rgba(255, 0, 0, 0.8)'
+  ctx.lineWidth = 1
+        ctx.setLineDash([8, 4])
+        ctx.beginPath()
+        ctx.moveTo(x, yScale.top)
+        ctx.lineTo(x, yScale.bottom)
+        ctx.stroke()
+        
+        // さらに強調するために薄い背景線も追加
+        ctx.strokeStyle = 'rgba(255, 100, 100, 0.3)'
+        ctx.lineWidth = 8
+        ctx.setLineDash([])
+        ctx.beginPath()
+        ctx.moveTo(x, yScale.top)
+        ctx.lineTo(x, yScale.bottom)
+        ctx.stroke()
+        
+        ctx.restore()
+        console.log(`baseDateLinePlugin: Line drawn successfully`)
       }
-      
-      if (baseDateIndex === -1) return
-      
-      const x = xScale.getPixelForValue(baseDateIndex)
-      const ctx = chart.ctx
-      ctx.save()
-      ctx.strokeStyle = 'rgba(255, 0, 0, 0.7)'
-      ctx.lineWidth = 2
-      ctx.setLineDash([5, 5])
-      ctx.beginPath()
-      ctx.moveTo(x, yScale.top)
-      ctx.lineTo(x, yScale.bottom)
-      ctx.stroke()
-      ctx.restore()
     }
-  }
+  }, [baseDate]) // baseDateが変更されたらプラグインを再生成
 
   // 年月ボタンの生成
   const getMonthButtons = () => {
@@ -644,7 +681,7 @@ export default function Dashboard() {
       </div>
 
       <div className="chart-container">
-        {data && <Line ref={chartRef} data={data} options={chartOptions} plugins={[baseDateLinePlugin]} />}
+        {data && <Line key={baseDate} ref={chartRef} data={data} options={chartOptions} plugins={[baseDateLinePlugin]} />}
       </div>
 
       <div className="stats-panel">
