@@ -181,5 +181,8 @@
     }
   },
   "active": "a4dccb4e720a03bb",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "ammonia_inventory_forecast/README.md",
+    "specs/001-ammonia-forecast-dashboard/spec.md"
+  ]
 }
