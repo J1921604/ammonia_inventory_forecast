@@ -1,3 +1,4 @@
+
 # 機能仕様書: アンモニア在庫レベル予測ダッシュボード
 
 **Feature Branch**: `001-ammonia-forecast-dashboard`  
