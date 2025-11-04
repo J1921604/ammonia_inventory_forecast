@@ -11,14 +11,10 @@
             "id": "3e50c1d5276f4e35",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "導入フロー.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "導入フロー"
+              "title": "新規タブ"
             }
           }
         ]
