@@ -719,7 +719,7 @@ export default function Dashboard() {
     <div className="container">
       <div className="header">
         <h1 className="title">
-          アンモニア在庫レベル予測ダッシュボード
+          アンモニア在庫レベル予測ダッシュボード（30日後まで予測）
         </h1>
       </div>
 
@@ -821,7 +821,7 @@ export default function Dashboard() {
         <div className="control-group">
           <h3>データ管理</h3>
           <p style={{ fontSize: '0.8rem', color: '#a0a0a0', marginBottom: '10px' }}>
-            training_data.csv
+            training_data.csv のみ操作できます。
           </p>
           <div
             className="refill-level-control"

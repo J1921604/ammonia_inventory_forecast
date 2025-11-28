@@ -5,6 +5,10 @@
   - [x] run_full_system.py の修正（update_dashboard.py 削除）
 - [x] データ追加理由の調査と修正
   - [x] preprocess.py のロジック修正（< を <= に変更）
+- [x] データ管理の集約とUI修正
+  - [x] public/data/predictions.csv を .gitignore に追加（リポジトリから除外）
+  - [x] ヘッダに「（30日後まで予測）」を追記
+  - [x] データ管理パネルに「training_data.csvのみ操作できます」を追記
 - [x] GitHub Pages 対応修正
   - [x] run_full_system.py に public/data へのコピー処理追加
   - [x] app/page.tsx の fetch 先を API から静的ファイルに変更

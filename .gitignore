@@ -16,7 +16,7 @@
 /build
 
 # data files (consolidated in backend/ai_pipeline/data)
-/public/data
+/public/data/predictions.csv
 
 # misc
 .DS_Store
