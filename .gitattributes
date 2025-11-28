@@ -1,21 +1,16 @@
-﻿# 自動的にテキストファイルを正規化する
+﻿# Normalize all text files automatically
 * text=auto
-
-# Markdown や仕様書は LF を強制
+# Markdown and documentation files use LF
 *.md text eol=lf
-
-# PowerShell スクリプトは CRLF を使用
+# PowerShell scripts use CRLF
 *.ps1 text eol=crlf
-
-# Shell スクリプトは LF を使用
+# Shell scripts use LF
 *.sh text eol=lf
-
-# JSON/YAML は LF を使用
+# JSON/YAML/text files use LF
 *.json text eol=lf
-*.yaml text eol=lf
+*.text text eol=lf
 *.yml text eol=lf
-
-# バイナリファイルは変換しない
+# Binary files should not be converted
 *.png binary
 *.jpg binary
 *.jpeg binary
