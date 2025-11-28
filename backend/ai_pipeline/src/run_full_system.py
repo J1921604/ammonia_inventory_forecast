@@ -136,6 +136,29 @@ def main():
     end_time = time.time()
     elapsed_time = end_time - start_time
     
+    # Copy to public/data for Next.js static export
+    import shutil
+    # script_path is .../backend/ai_pipeline/src/run_full_system.py
+    # repo_root is .../ammonia_inventory_forecast
+    repo_root = script_path.parent.parent.parent.parent
+    
+    public_data_dir = repo_root / "public" / "data"
+    public_data_dir.mkdir(parents=True, exist_ok=True)
+    
+    # src_csv is in .../backend/ai_pipeline/data/predictions.csv
+    # project_dir is .../backend/ai_pipeline
+    src_csv = Path(project_dir) / "data" / "predictions.csv"
+    dst_csv = public_data_dir / "predictions.csv"
+    
+    if src_csv.exists():
+        try:
+            shutil.copy2(src_csv, dst_csv)
+            print(f"✅ predictions.csv を public/data にコピーしました: {dst_csv}")
+        except Exception as e:
+            print(f"⚠️ public/data へのコピーに失敗しました: {e}")
+    else:
+        print(f"⚠️ 警告: {src_csv} が見つからないため、public/data にコピーできませんでした")
+
     print("\n=== 実行完了 ===")
     print("✅ 動的消費量率による学習 → 予測 が完了しました")
     print(f"⏱️  実行時間: {elapsed_time:.2f}秒")

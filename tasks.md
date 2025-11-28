@@ -1,0 +1,19 @@
+# タスク管理
+
+- [x] 不要ファイル削除と構造最適化
+  - [x] backend/ai_pipeline/dashboards/index.html の削除
+  - [x] run_full_system.py の修正（update_dashboard.py 削除）
+- [x] データ追加理由の調査と修正
+  - [x] preprocess.py のロジック修正（< を <= に変更）
+- [x] GitHub Pages 対応修正
+  - [x] run_full_system.py に public/data へのコピー処理追加
+  - [x] app/page.tsx の fetch 先を API から静的ファイルに変更
+  - [x] next.config.js の設定確認と修正
+- [x] ドキュメント更新
+  - [x] README.md (v1.0.0, 2025/12/05, リンク修正)
+  - [x] docs/完全仕様書.md (v1.0.0, 2025/12/05, リンク修正)
+  - [x] docs/DEPLOY_GUIDE.md (v1.0.0, 2025/12/05, リンク修正)
+- [x] ビルドと検証
+  - [x] npm run build 成功確認
+  - [x] python run_full_system.py 成功確認
+- [ ] 最終報告

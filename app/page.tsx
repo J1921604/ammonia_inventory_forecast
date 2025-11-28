@@ -98,8 +98,10 @@ export default function Dashboard() {
   useEffect(() => {
     const loadCsvData = async () => {
       try {
-        // APIルート経由でbackend/ai_pipeline/data/predictions.csvを読み込む
-        const response = await fetch('/api/data/predictions')
+        // 静的ファイルとして public/data/predictions.csv を読み込む
+        // GitHub Pages (production) では basePath が付与されるため、環境変数または相対パスで対応
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+        const response = await fetch(`${basePath}/data/predictions.csv`)
         const csvText = await response.text()
         
         const lines = csvText.split('\n').filter(Boolean)

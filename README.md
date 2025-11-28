@@ -340,6 +340,11 @@ npm install
 - **URL**: https://ammonia-inventory-forecast.vercel.app
 - **特徴**: 高速CDN、自動プレビュー、最適化ビルド
 
+## 📚 ドキュメント
+
+- [完全仕様書](https://github.com/J1921604/ammonia_inventory_forecast/blob/main/docs/完全仕様書.md)
+- [デプロイガイド](https://github.com/J1921604/ammonia_inventory_forecast/blob/main/docs/DEPLOY_GUIDE.md)
+
 ## 📝 ライセンス
 
 MIT License
