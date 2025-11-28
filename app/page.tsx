@@ -50,7 +50,19 @@ export default function Dashboard() {
     nextRefill: '-',
   })
   const [activeMonth, setActiveMonth] = useState<string>('')
+  const [reloadKey, setReloadKey] = useState(0)
+  const [isTraining, setIsTraining] = useState(false)
+  const [isPredicting, setIsPredicting] = useState(false)
+  const [isLocal, setIsLocal] = useState(true)
   const chartRef = useRef<ChartJS<'line'>>(null)
+
+  useEffect(() => {
+    // ローカル環境判定 (localhost または 127.0.0.1)
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname
+      setIsLocal(hostname === 'localhost' || hostname === '127.0.0.1')
+    }
+  }, [])
 
   // ユーティリティ関数
   const ymd = (d: Date): string => {
@@ -86,8 +98,8 @@ export default function Dashboard() {
   useEffect(() => {
     const loadCsvData = async () => {
       try {
-        const basePath = process.env.NODE_ENV === 'production' ? '/ammonia_inventory_forecast' : ''
-        const response = await fetch(`${basePath}/data/predictions.csv`)
+        // APIルート経由でbackend/ai_pipeline/data/predictions.csvを読み込む
+        const response = await fetch('/api/data/predictions')
         const csvText = await response.text()
         
         const lines = csvText.split('\n').filter(Boolean)
@@ -138,7 +150,7 @@ export default function Dashboard() {
     }
 
     loadCsvData()
-  }, [])
+  }, [reloadKey])
 
   const isBeforeDateOnly = (a: Date, b: Date): boolean => {
     const ay = ymd(a)
@@ -566,12 +578,137 @@ export default function Dashboard() {
     }
   }
 
-  const runTrain = () => {
-    alert('スタンドアロン版で、このボタンは無効です。')
+  const runTrain = async () => {
+    if (!isLocal) {
+      alert('学習機能はローカル環境（localhost）でのみ利用可能です。\nGitHub Pages (https://j1921604.github.io/ammonia_inventory_forecast/) では実行できません。')
+      return
+    }
+    if (isTraining) return
+    if (!confirm('全データを使用してAIモデルを再学習します。続行しますか？')) {
+      return
+    }
+
+    setIsTraining(true)
+    try {
+      const response = await fetch('/api/ml/train', { method: 'POST' })
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(payload.log ?? '学習に失敗しました')
+      }
+
+      alert('学習が完了しました。\n\nコマンド出力:\n' + (payload.log ?? 'ログなし'))
+    } catch (error) {
+      console.error('学習エラー:', error)
+      const message = error instanceof Error ? error.message : '学習中にエラーが発生しました'
+      alert(message)
+    } finally {
+      setIsTraining(false)
+    }
   }
 
-  const runPredict = () => {
-    alert('スタンドアロン版で、このボタンは無効です。')
+  const runPredict = async () => {
+    if (!isLocal) {
+      alert('予測機能はローカル環境（localhost）でのみ利用可能です。\nGitHub Pages (https://j1921604.github.io/ammonia_inventory_forecast/) では実行できません。')
+      return
+    }
+    if (isPredicting) return
+    if (!confirm('最新データで1か月分の予測を再計算しますか？')) {
+      return
+    }
+
+    setIsPredicting(true)
+    try {
+      const response = await fetch('/api/ml/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ forecastDays: 30 }),
+      })
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(payload.log ?? '予測に失敗しました')
+      }
+
+      alert('予測が完了しました。最新データを再読み込みします。')
+      setReloadKey((key) => key + 1)
+    } catch (error) {
+      console.error('予測エラー:', error)
+      const message = error instanceof Error ? error.message : '予測中にエラーが発生しました'
+      alert(message)
+    } finally {
+      setIsPredicting(false)
+    }
+  }
+
+  const handleImportCSV = () => {
+    if (!isLocal) {
+      alert('インポート機能はローカル環境（localhost）でのみ利用可能です。\nGitHub Pages (https://j1921604.github.io/ammonia_inventory_forecast/) では利用できません。')
+      return
+    }
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.csv'
+    input.onchange = async (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (!file) return
+
+      if (file.name !== 'training_data.csv') {
+        alert('エラー: training_data.csv 以外のファイルはインポートできません。')
+        return
+      }
+
+      const formData = new FormData()
+      formData.append('file', file)
+
+      try {
+        const response = await fetch('/api/data/import', {
+          method: 'POST',
+          body: formData,
+        })
+
+        if (!response.ok) {
+          throw new Error('アップロードに失敗しました')
+        }
+
+        alert('CSVファイルをインポートしました。')
+        // チャート再読み込みのためにリロードキー更新などが必要ならここで行う
+        // ここでは簡易的にリロードを促すか、既存の読み込みロジックを呼ぶ
+        if (confirm('データを反映するためにページをリロードしますか？')) {
+          window.location.reload()
+        }
+      } catch (error) {
+        console.error('Import error:', error)
+        alert('インポートに失敗しました。')
+      }
+    }
+    input.click()
+  }
+
+  const handleExportCSV = async () => {
+    if (!isLocal) {
+      alert('学習データの直接エクスポートはローカル環境でのみ可能です。\nGitHub Pages (https://j1921604.github.io/ammonia_inventory_forecast/) では利用できません。')
+      return
+    }
+
+    try {
+      const response = await fetch('/api/data/export')
+      if (!response.ok) {
+        throw new Error('エクスポートに失敗しました')
+      }
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'training_data.csv'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('Export error:', error)
+      alert('エクスポートに失敗しました。')
+    }
   }
 
   const data = getChartData()
@@ -580,7 +717,7 @@ export default function Dashboard() {
     <div className="container">
       <div className="header">
         <h1 className="title">
-          アンモニア在庫レベル予測ダッシュボード（スタンドアロン版デモ用アプリ）
+          アンモニア在庫レベル予測ダッシュボード
         </h1>
       </div>
 
@@ -670,11 +807,34 @@ export default function Dashboard() {
               flexGrow: 1,
             }}
           >
-            <button className="btn" onClick={runTrain} style={{ width: '120px' }}>
-              学習
+            <button className="btn" onClick={runTrain} style={{ width: '120px' }} disabled={isTraining}>
+              {isTraining ? '学習中...' : '学習'}
             </button>
-            <button className="btn" onClick={runPredict} style={{ width: '120px' }}>
-              予測
+            <button className="btn" onClick={runPredict} style={{ width: '120px' }} disabled={isPredicting}>
+              {isPredicting ? '予測中...' : '予測'}
+            </button>
+          </div>
+        </div>
+
+        <div className="control-group">
+          <h3>データ管理</h3>
+          <p style={{ fontSize: '0.8rem', color: '#a0a0a0', marginBottom: '10px' }}>
+            training_data.csv
+          </p>
+          <div
+            className="refill-level-control"
+            style={{
+              flexDirection: 'column',
+              gap: '15px',
+              justifyContent: 'center',
+              flexGrow: 1,
+            }}
+          >
+            <button className="btn" onClick={handleImportCSV} style={{ width: '120px' }}>
+              インポート
+            </button>
+            <button className="btn" onClick={handleExportCSV} style={{ width: '120px' }}>
+              エクスポート
             </button>
           </div>
         </div>

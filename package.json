@@ -1,13 +1,20 @@
 {
   "name": "ammonia-inventory-forecast",
   "version": "1.0.0",
+  "description": "Ammonia Inventory Forecast Dashboard - Next.js 14 Static Site",
+  "author": "J1921604",
+  "license": "MIT",
+  "homepage": "https://j1921604.github.io/ammonia_inventory_forecast/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/J1921604/ammonia_inventory_forecast.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "export": "next build && next export"
+    "lint": "next lint"
   },
   "dependencies": {
     "next": "^14.0.4",

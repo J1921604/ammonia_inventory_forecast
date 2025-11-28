@@ -1,30 +1,35 @@
-﻿# Power-Demand-Forecast Development Guidelines
+﻿# Ammonia Inventory Forecast Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2025-11-25
+Auto-generated from all feature plans. Last updated: 2025-12-05
 
 ## Active Technologies
 
-- Python 3.10.11（固定バージョン） (feature/impl-001-Power-Demand-Forecast)
+- Node.js 20.x
+- Next.js 14 (App Router)
+- TypeScript 5.x
+- React 18
+- Chart.js 4.4.1
 
 ## Project Structure
 
 ```text
-backend/
-frontend/
-tests/
+app/
+public/
+docs/
+.github/
 ```
 
 ## Commands
 
-cd src; pytest; ruff check .
+npm install; npm run build; npm run dev
 
 ## Code Style
 
-Python 3.10.11（固定バージョン）: Follow standard conventions
+TypeScript: Follow standard conventions
 
 ## Recent Changes
 
-- feature/impl-001-Power-Demand-Forecast: Added Python 3.10.11（固定バージョン）
+- 2025-12-05: Migrated to Next.js 14 with GitHub Pages deployment
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

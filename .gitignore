@@ -15,9 +15,13 @@
 # production
 /build
 
+# data files (consolidated in backend/ai_pipeline/data)
+/public/data
+
 # misc
 .DS_Store
 *.pem
+backend/ai_pipeline/models/
 
 # debug
 npm-debug.log*
