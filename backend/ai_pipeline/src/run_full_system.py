@@ -100,8 +100,7 @@ def main():
     required_scripts = [
         "src/prepare_data.py",
         "src/train.py",
-        "src/predict.py", 
-        "src/update_dashboard.py"
+        "src/predict.py"
     ]
     
     missing_scripts = []
