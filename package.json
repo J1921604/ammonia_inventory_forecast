@@ -1,0 +1,40 @@
+{
+  "name": "ammonia-inventory-forecast",
+  "version": "1.0.0",
+  "description": "Ammonia Inventory Forecast Dashboard - Next.js 14 Static Site",
+  "author": "J1921604",
+  "license": "MIT",
+  "homepage": "https://j1921604.github.io/ammonia_inventory_forecast/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/J1921604/ammonia_inventory_forecast.git"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "date-fns": "^4.1.0",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4",
+    "serve": "^14.2.5",
+    "typescript": "^5.3.3"
+  }
+}
