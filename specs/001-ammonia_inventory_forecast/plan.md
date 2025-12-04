@@ -1,7 +1,7 @@
 # 実装計画: アンモニア在庫レベル予測ダッシュボード
 
-**Branch**: `feature/impl-001-ammonia_inventory_forecast` | **Date**: 2025-12-05 | **Spec**: [spec.md](./spec.md)  
-**Input**: 機能仕様書 `/specs/001-ammonia_inventory_forecast/spec.md`
+**Branch**: `feature/impl-001-ammonia_inventory_forecast` | **Date**: 2025-12-05 | **Spec**: [spec.md](https://github.com/J1921604/ammonia_inventory_forecast/blob/main/specs/001-ammonia_inventory_forecast/spec.md)  
+**Input**: 機能仕様書 [/specs/001-ammonia_inventory_forecast/spec.md](https://github.com/J1921604/ammonia_inventory_forecast/blob/main/specs/001-ammonia_inventory_forecast/spec.md)
 
 ## 概要
 

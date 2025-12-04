@@ -165,16 +165,18 @@ npm run dev
 
 ### AIパイプライン（任意）
 
-ローカルで学習・予測を実行する場合は Python 3.11 以降と pip が必要です。
+ローカルで学習・予測を実行する場合は **Python 3.10.11** と pip が必要です。
 
 ```bash
 cd backend/ai_pipeline
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-python src/run_full_system.py  # 学習 → 予測
+py -3.10 -m pip install --upgrade pip
+py -3.10 -m pip install -r requirements.txt
+py -3.10 src/run_full_system.py  # 学習 → 予測
 ```
 
-Next.js の API ルートから Python を呼び出す際にカスタムパスが必要な場合は、`PYTHON_EXECUTABLE` 環境変数に利用したい実行ファイル（例: `py` や `C:\Python311\python.exe`）を設定してください。
+**実行コマンド**: 本プロジェクトの標準実行環境はPython 3.10.11です。`py -3.10`コマンドで実行してください。
+
+Next.js の API ルートから Python を呼び出す際にカスタムパスが必要な場合は、`PYTHON_EXECUTABLE` 環境変数に利用したい実行ファイル（例: `py -3.10` や `C:\Python310\python.exe`）を設定してください。
 
 ### ビルド
 

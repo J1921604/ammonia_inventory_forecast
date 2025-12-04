@@ -2,7 +2,7 @@
 
 **Purpose**: 仕様の完全性と品質を検証し、plan.mdへの移行前に全要件をクリアする  
 **Created**: 2025-12-05  
-**Feature**: [spec.md](./spec.md)
+**Feature**: [spec.md](https://github.com/J1921604/ammonia_inventory_forecast/blob/main/specs/001-ammonia_inventory_forecast/spec.md)
 
 ## コンテンツ品質
 
