@@ -112,47 +112,6 @@ ammonia_inventory_forecast/
 
 **構造決定**: Webアプリケーション構造を選択（フロントエンド + AIバックエンド分離）。既存のディレクトリ構造を維持し、仕様ドキュメントをspecs/001-ammonia_inventory_forecast/に配置。
 
-## 実装スケジュール
-
-```mermaid
-gantt
-    title アンモニア在庫予測ダッシュボード 実装スケジュール（2025-12-15開始、土日・年末年始休日考慮）
-    dateFormat YYYY-MM-DD
-    axisFormat %m/%d
-    
-    section Phase 1 セットアップ
-    開発環境確認               :done, p1_1, 2025-12-15, 1d
-    仕様ブランチ作成           :done, p1_2, after p1_1, 1d
-    
-    section Phase 2 基盤整備
-    E2Eテスト環境構築         :p2_1, 2025-12-16, 2d
-    Python環境セットアップ    :p2_2, after p2_1, 1d
-    データ補完ロジック実装    :p2_3, after p2_2, 2d
-    
-    section Phase 3 US1 リアルタイム監視（P1）
-    ダッシュボードUI実装      :p3_1, after p2_3, 3d
-    グラフ描画機能実装        :p3_2, after p3_1, 2d
-    補充警告システム実装      :p3_3, after p3_2, 2d
-    US1 E2Eテスト実装         :p3_4, after p3_3, 2d
-    
-    section Phase 4 US2 AI学習予測（P2）
-    学習API実装               :p4_1, after p3_4, 2d
-    予測API実装               :p4_2, after p4_1, 2d
-    ローカル環境検出実装      :p4_3, after p4_2, 1d
-    US2 E2Eテスト実装         :p4_4, after p4_3, 2d
-    
-    section Phase 5 US3 データ管理（P3）
-    インポートAPI実装         :p5_1, after p4_4, 2d
-    エクスポートAPI実装       :p5_2, after p5_1, 1d
-    US3 E2Eテスト実装         :p5_3, after p5_2, 1d
-    
-    section Phase 6 統合とデプロイ
-    GitHub Actions設定        :p6_1, after p5_3, 2d
-    パフォーマンス最適化      :p6_2, after p6_1, 2d
-    最終E2Eテスト実行         :p6_3, after p6_2, 1d
-    本番デプロイ              :p6_4, after p6_3, 1d
-```
-
 ## データモデル設計
 
 ### CSVデータスキーマ
